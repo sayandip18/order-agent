@@ -15,6 +15,7 @@ export default defineConfig({
     proxy: {
       '/auth': 'http://localhost:3000',
       '/items': 'http://localhost:3000',
+      '/cart': 'http://localhost:3000',
     },
   },
 })
