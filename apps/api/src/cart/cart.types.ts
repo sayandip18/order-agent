@@ -12,5 +12,6 @@ export interface Cart {
 declare module 'express-session' {
   interface SessionData {
     cart: Cart;
+    userId: string;
   }
 }
