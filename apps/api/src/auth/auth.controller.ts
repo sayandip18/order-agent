@@ -7,7 +7,7 @@ import {
   UseGuards,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import type { Session as ExpressSession } from 'express-session';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { UserResponseDto } from '../users/user-response.dto';
@@ -36,7 +36,10 @@ export class AuthController {
   }
 
   @Get('me')
-  async me(@Session() session: ExpressSession & { userId?: string }, @Req() req: Request): Promise<UserResponseDto> {
+  me(
+    @Session() session: ExpressSession & { userId?: string },
+    @Req() req: Request,
+  ): UserResponseDto {
     const user = req.user as User | undefined;
     if (!session.userId && !user) {
       throw new UnauthorizedException();
