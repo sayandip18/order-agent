@@ -59,7 +59,7 @@ The API reads the following environment variables (all have defaults for local d
 | `GOOGLE_CLIENT_ID`     | —                                            | Google OAuth client ID         |
 | `GOOGLE_CLIENT_SECRET` | —                                            | Google OAuth client secret     |
 | `GOOGLE_CALLBACK_URL`  | `http://localhost:3000/auth/google/callback` | OAuth redirect URI             |
-| `FRONTEND_URL`         | `http://localhost:5173`                      | Where to redirect after login  |
+| `FRONTEND_URL`         | `http://localhost:5173`                      | Base URL of the frontend (login redirects to `{FRONTEND_URL}/shop`) |
 
 ---
 

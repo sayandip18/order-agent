@@ -32,7 +32,8 @@ export class AuthController {
   ): void {
     const user = req.user as User;
     session['userId'] = user.id;
-    res.redirect(process.env.FRONTEND_URL ?? 'http://localhost:5173');
+    const base = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+    res.redirect(`${base}/shop`);
   }
 
   @Get('me')
@@ -51,7 +52,8 @@ export class AuthController {
   @Get('logout')
   logout(@Session() session: ExpressSession, @Res() res: Response): void {
     session.destroy(() => {
-      res.redirect(process.env.FRONTEND_URL ?? 'http://localhost:5173');
+      const base = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+      res.redirect(`${base}/login`);
     });
   }
 }
