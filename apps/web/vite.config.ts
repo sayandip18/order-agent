@@ -16,6 +16,7 @@ export default defineConfig({
       '/auth': 'http://localhost:3000',
       '/items': 'http://localhost:3000',
       '/cart': 'http://localhost:3000',
+      '/orders': 'http://localhost:3000',
     },
   },
 })

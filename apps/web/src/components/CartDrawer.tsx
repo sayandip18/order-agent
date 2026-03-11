@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Sheet,
   SheetContent,
@@ -14,10 +16,38 @@ interface Props {
   total: number
   onRemove: (itemId: string) => void
   onClear: () => void
+  onOrderPlaced: () => void
 }
 
-export default function CartDrawer({ open, onClose, cart, total, onRemove, onClear }: Props) {
+export default function CartDrawer({
+  open,
+  onClose,
+  cart,
+  total,
+  onRemove,
+  onClear,
+  onOrderPlaced,
+}: Props) {
   const isEmpty = cart.items.length === 0
+  const [placing, setPlacing] = useState(false)
+  const navigate = useNavigate()
+
+  async function handleCheckout() {
+    setPlacing(true)
+    try {
+      const res = await fetch('/orders', {
+        method: 'POST',
+        credentials: 'include',
+      })
+      if (res.ok) {
+        onOrderPlaced()
+        onClose()
+        void navigate('/orders')
+      }
+    } finally {
+      setPlacing(false)
+    }
+  }
 
   return (
     <Sheet open={open} onOpenChange={(v) => { if (!v) onClose() }}>
@@ -28,7 +58,7 @@ export default function CartDrawer({ open, onClose, cart, total, onRemove, onCle
         {/* Header */}
         <SheetHeader className="px-6 py-5 border-b border-neutral-100">
           <SheetTitle className="text-base font-semibold text-neutral-900">
-            Cart {!isEmpty && <span className="text-neutral-400 font-normal">({cart.items.length})</span>}
+            Cart{!isEmpty && <span className="text-neutral-400 font-normal"> ({cart.items.length})</span>}
           </SheetTitle>
         </SheetHeader>
 
@@ -80,7 +110,13 @@ export default function CartDrawer({ open, onClose, cart, total, onRemove, onCle
               <span className="text-sm text-neutral-500">Total</span>
               <span className="text-base font-semibold text-neutral-900">${total.toFixed(2)}</span>
             </div>
-            <Button className="w-full">Checkout</Button>
+            <Button
+              className="w-full"
+              disabled={placing}
+              onClick={() => void handleCheckout()}
+            >
+              {placing ? 'Placing order…' : 'Place order'}
+            </Button>
             <button
               onClick={onClear}
               className="w-full text-xs text-neutral-400 hover:text-neutral-600 transition-colors py-1"

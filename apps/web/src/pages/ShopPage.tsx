@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Card,
   CardContent,
@@ -103,6 +104,12 @@ export default function ShopPage() {
             )}
           </button>
 
+          <Link
+            to="/orders"
+            className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors"
+          >
+            Orders
+          </Link>
           <a
             href="/auth/logout"
             className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors"
@@ -155,6 +162,7 @@ export default function ShopPage() {
         total={total}
         onRemove={(id) => void removeItem(id)}
         onClear={() => void clearCart()}
+        onOrderPlaced={() => void clearCart()}
       />
     </div>
   )

@@ -131,3 +131,15 @@ Cart state is stored server-side in Redis, scoped to the user's session cookie.
 | GET    | /auth/google/callback | Google redirects here after consent; sets session cookie |
 | GET    | /auth/me              | Returns current logged-in user                           |
 | GET    | /auth/logout          | Destroys session and redirects to frontend               |
+
+### Orders
+
+| Method | Path               | Body                    | Description                                  |
+|--------|--------------------|-------------------------|----------------------------------------------|
+| POST   | /orders            | —                       | Create order from current cart, clears cart  |
+| GET    | /orders            | —                       | Fetch all orders                             |
+| GET    | /orders/mine       | —                       | Fetch orders for the logged-in user          |
+| GET    | /orders/:id        | —                       | Fetch a single order                         |
+| PATCH  | /orders/:id/status | `{ "status": "..." }`   | Update order status                          |
+
+Order statuses: `processing`, `on_the_way`, `delivered`, `canceled`

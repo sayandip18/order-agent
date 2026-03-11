@@ -7,5 +7,6 @@ import { ItemsModule } from '../items/items.module';
   imports: [ItemsModule],
   controllers: [CartController],
   providers: [CartService],
+  exports: [CartService],
 })
 export class CartModule {}

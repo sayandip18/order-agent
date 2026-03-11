@@ -6,8 +6,10 @@ import { ItemsModule } from './items/items.module';
 import { CartModule } from './cart/cart.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { OrdersModule } from './orders/orders.module';
 import { Item } from './items/item.entity';
 import { User } from './users/user.entity';
+import { Order } from './orders/order.entity';
 
 @Module({
   imports: [
@@ -18,13 +20,14 @@ import { User } from './users/user.entity';
       username: process.env.DB_USER ?? 'postgres',
       password: process.env.DB_PASSWORD ?? 'postgres',
       database: process.env.DB_NAME ?? 'order_agent',
-      entities: [Item, User],
+      entities: [Item, User, Order],
       synchronize: true,
     }),
     ItemsModule,
     CartModule,
     UsersModule,
     AuthModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
