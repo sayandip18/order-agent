@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ItemsModule } from './items/items.module';
+import { CartModule } from './cart/cart.module';
 import { Item } from './items/item.entity';
 
 @Module({
@@ -18,6 +19,7 @@ import { Item } from './items/item.entity';
       synchronize: true,
     }),
     ItemsModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
