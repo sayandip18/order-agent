@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserResponseDto } from './user-response.dto';
@@ -20,9 +21,9 @@ export class UsersController {
     return users.map((user) => UserResponseDto.from(user));
   }
 
-  @Get('by-email/:email')
+  @Get('by-email')
   async findByEmail(
-    @Param('email') email: string,
+    @Query('email') email: string,
   ): Promise<UserResponseDto | null> {
     const user = await this.usersService.findByEmail(email);
     return user ? UserResponseDto.from(user) : null;
