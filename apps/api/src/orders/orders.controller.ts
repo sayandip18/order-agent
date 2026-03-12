@@ -53,4 +53,18 @@ export class OrdersController {
     const order = await this.ordersService.updateStatus(id, dto);
     return OrderResponseDto.from(order);
   }
+
+  @Get('by-user/:userId')
+  async findByUser(
+    @Param('userId') userId: string,
+  ): Promise<OrderResponseDto[]> {
+    const orders = await this.ordersService.findByUser(userId);
+    return orders.map(OrderResponseDto.from);
+  }
+
+  @Patch(':id/cancel')
+  async cancelOrder(@Param('id') id: string): Promise<OrderResponseDto> {
+    const order = await this.ordersService.cancelOrder(id);
+    return OrderResponseDto.from(order);
+  }
 }

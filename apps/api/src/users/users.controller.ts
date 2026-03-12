@@ -13,6 +13,14 @@ export class UsersController {
     return users.map(UserResponseDto.from);
   }
 
+  @Get('by-email/:email')
+  async findByEmail(
+    @Param('email') email: string,
+  ): Promise<UserResponseDto | null> {
+    const user = await this.usersService.findByEmail(email);
+    return user ? UserResponseDto.from(user) : null;
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserResponseDto> {
     const user = await this.usersService.findOne(id);

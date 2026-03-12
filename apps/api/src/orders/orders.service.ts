@@ -51,6 +51,12 @@ export class OrdersService {
     });
   }
 
+  async cancelOrder(id: string): Promise<Order> {
+    const order = await this.findOne(id);
+    order.status = OrderStatus.CANCELED;
+    return this.ordersRepository.save(order);
+  }
+
   async findOne(id: string): Promise<Order> {
     const order = await this.ordersRepository.findOneBy({ id });
     if (!order) throw new NotFoundException(`Order "${id}" not found`);
