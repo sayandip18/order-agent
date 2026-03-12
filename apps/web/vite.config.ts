@@ -16,7 +16,13 @@ export default defineConfig({
       '/auth': 'http://localhost:3000',
       '/items': 'http://localhost:3000',
       '/cart': 'http://localhost:3000',
-      '/orders': 'http://localhost:3000',
+      '/orders': {
+        target: 'http://localhost:3000',
+        bypass(req) {
+          // Don't proxy browser page navigations — let Vite serve index.html
+          if (req.headers.accept?.includes('text/html')) return req.url
+        },
+      },
     },
   },
 })
