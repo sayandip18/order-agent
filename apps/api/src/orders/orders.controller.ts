@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -17,9 +18,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  async create(
-    @Session() session: ExpressSession,
-  ): Promise<OrderResponseDto> {
+  async create(@Session() session: ExpressSession): Promise<OrderResponseDto> {
     const order = await this.ordersService.createFromCart(session as any);
     return OrderResponseDto.from(order);
   }
@@ -27,7 +26,7 @@ export class OrdersController {
   @Get()
   async findAll(): Promise<OrderResponseDto[]> {
     const orders = await this.ordersService.findAll();
-    return orders.map(OrderResponseDto.from);
+    return orders.map((order) => OrderResponseDto.from(order));
   }
 
   @Get('mine')
@@ -36,12 +35,13 @@ export class OrdersController {
   ): Promise<OrderResponseDto[]> {
     if (!session.userId) return [];
     const orders = await this.ordersService.findByUser(session.userId);
-    return orders.map(OrderResponseDto.from);
+    return orders.map((order) => OrderResponseDto.from(order));
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<OrderResponseDto> {
     const order = await this.ordersService.findOne(id);
+    if (!order) throw new NotFoundException(`Order ${id} not found`);
     return OrderResponseDto.from(order);
   }
 
@@ -51,6 +51,7 @@ export class OrdersController {
     @Body() dto: UpdateOrderStatusDto,
   ): Promise<OrderResponseDto> {
     const order = await this.ordersService.updateStatus(id, dto);
+    if (!order) throw new NotFoundException(`Order ${id} not found`);
     return OrderResponseDto.from(order);
   }
 
@@ -59,12 +60,13 @@ export class OrdersController {
     @Param('userId') userId: string,
   ): Promise<OrderResponseDto[]> {
     const orders = await this.ordersService.findByUser(userId);
-    return orders.map(OrderResponseDto.from);
+    return orders.map((order) => OrderResponseDto.from(order));
   }
 
   @Patch(':id/cancel')
   async cancelOrder(@Param('id') id: string): Promise<OrderResponseDto> {
     const order = await this.ordersService.cancelOrder(id);
+    if (!order) throw new NotFoundException(`Order ${id} not found`);
     return OrderResponseDto.from(order);
   }
 }

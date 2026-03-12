@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserResponseDto } from './user-response.dto';
 import { UpdateUserDto } from './update-user.dto';
@@ -10,7 +17,7 @@ export class UsersController {
   @Get()
   async findAll(): Promise<UserResponseDto[]> {
     const users = await this.usersService.findAll();
-    return users.map(UserResponseDto.from);
+    return users.map((user) => UserResponseDto.from(user));
   }
 
   @Get('by-email/:email')
@@ -24,6 +31,7 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserResponseDto> {
     const user = await this.usersService.findOne(id);
+    if (!user) throw new NotFoundException(`User ${id} not found`);
     return UserResponseDto.from(user);
   }
 
@@ -33,6 +41,7 @@ export class UsersController {
     @Body() dto: UpdateUserDto,
   ): Promise<UserResponseDto> {
     const user = await this.usersService.update(id, dto);
+    if (!user) throw new NotFoundException(`User ${id} not found`);
     return UserResponseDto.from(user);
   }
 }
